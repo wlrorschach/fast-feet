@@ -6,6 +6,7 @@ import Auth from '../app/middlewares/auth';
 const routes = new Router();
 
 routes.post('/users', UserController.store);
+routes.get('/users', UserController.index);
 routes.post('/sessions', SesssionController.store);
 
 routes.put('/users', Auth, UserController.update);
