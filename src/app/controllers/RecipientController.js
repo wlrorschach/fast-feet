@@ -19,7 +19,7 @@ class RecipientController {
     }
 
     const recipientExists = await Recipient.findOne({
-      where: { name: req.body.name },
+      where: { email: req.body.email },
     });
 
     if (recipientExists) {
@@ -56,13 +56,13 @@ class RecipientController {
       return res.status(400).json(MESSAGE.ERROR.VALIDATION);
     }
 
-    const { name } = req.body;
+    const { email } = req.body;
 
     const rec = await Recipient.findByPk(req.userId);
 
-    if (name && rec.name !== name) {
+    if (email && rec.email !== email) {
       const recExists = await Recipient.findOne({
-        where: { name },
+        where: { email },
       });
       if (recExists) {
         return res.status(400).json(MESSAGE.ERROR.DUPLICITY.RECIPIENT);
