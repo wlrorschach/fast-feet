@@ -7,7 +7,8 @@ export default {
     },
     VALIDATION: { error: 'Validations fails!' },
     TOLKEN: { error: 'Invalid tolken!' },
-    NO_RESULT: { ERROR: 'Recipient dosent exists' },
+    NO_RESULT: { error: 'Recipient dosent exists' },
+    UNAUTORIZED: { error: 'Unauthorized user' },
   },
   SUCCES: {
     TEST: { message: 'End point ok' },

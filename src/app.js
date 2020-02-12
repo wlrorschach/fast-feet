@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import userRoutes from './routes/user.routes';
-import recipientsRoutes from './routes/recipient.routes';
+import routes from './routes';
 
 import './database';
 
@@ -19,7 +19,7 @@ class App {
   }
 
   routes() {
-    this.server.use([userRoutes, recipientsRoutes]);
+    this.server.use([routes]);
   }
 }
 
