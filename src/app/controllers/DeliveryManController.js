@@ -26,6 +26,10 @@ class DeliveryManController {
 
     return res.json(deliveryMan);
   }
+
+  async update(req, res) {
+    return res.json(MESSAGE.SUCCES.TEST);
+  }
 }
 
 export default new DeliveryManController();
