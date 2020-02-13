@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import DeliveryMan from '../models/DeliveryMan';
-import User from '../models/User';
 import MESSAGE from '../messages';
+import File from '../models/File';
 
 class DeliveryManController {
   async store(req, res) {
@@ -16,10 +16,12 @@ class DeliveryManController {
       return res.status(400).json(MESSAGE.ERROR.VALIDATION);
     }
 
-    const admin = await User.findByPk(req.userId);
+    const exist = await DeliveryMan.findOne({
+      where: { email: req.body.email },
+    });
 
-    if (!admin) {
-      return res.status(401).json(MESSAGE.ERROR.UNAUTORIZED);
+    if (exist) {
+      return res.status(400).json(MESSAGE.ERROR.DUPLICITY.DELIVERYMAN);
     }
 
     const deliveryMan = await DeliveryMan.create(req.body);
@@ -28,7 +30,57 @@ class DeliveryManController {
   }
 
   async update(req, res) {
-    return res.json(MESSAGE.SUCCES.TEST);
+    const schema = Yup.object({
+      name: Yup.string(),
+      email: Yup.string().email(),
+      avatar_id: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json(MESSAGE.ERROR.VALIDATION);
+    }
+
+    const { email } = req.body;
+    const deliveryMan = await DeliveryMan.findByPk(req.params.id);
+
+    if (email && deliveryMan.email !== email) {
+      const emailDuplicated = DeliveryMan.findOne({ where: { email } });
+
+      if (emailDuplicated) {
+        return res.status(400).json(MESSAGE.ERROR.DUPLICITY.DELIVERYMAN);
+      }
+    }
+
+    const { id, name, avatar_id } = await deliveryMan.update(req.body);
+
+    return res.json({ id, name, email, avatar_id });
+  }
+
+  async index(req, res) {
+    const { page = 1 } = req.query;
+
+    const deliveryMans = await DeliveryMan.findAll({
+      where: { deleted: false },
+      attributes: ['id', 'name', 'email', 'avatar_id', 'deleted'],
+      include: [
+        { model: File, as: 'avatar', attributes: ['name', 'path', 'url'] },
+      ],
+      order: ['name'],
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
+    return res.json(deliveryMans);
+  }
+
+  async delete(req, res) {
+    const deliveryMan = await DeliveryMan.findOne({
+      where: { id: req.params.id },
+    });
+
+    deliveryMan.deleted = true;
+    await deliveryMan.save();
+
+    return res.json(deliveryMan);
   }
 }
 

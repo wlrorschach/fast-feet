@@ -6,6 +6,7 @@ class DeliveryMan extends Model {
       {
         name: Sequelize.STRING,
         email: Sequelize.STRING,
+        deleted: Sequelize.BOOLEAN,
       },
       { sequelize }
     );

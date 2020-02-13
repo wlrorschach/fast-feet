@@ -8,6 +8,7 @@ import UserController from './app/controllers/UserController';
 import SesssionController from './app/controllers/SesssionController';
 import DeliveryManController from './app/controllers/DeliveryManController';
 import AvatarFileContoller from './app/controllers/AvatarFileContoller';
+import DeliveryController from './app/controllers/DeliveryController';
 
 import multerConfig from './config/multer';
 
@@ -15,16 +16,23 @@ const routes = new Router();
 const upload = multer(multerConfig);
 
 /**
- * USER
+ * DELIVERY
  */
-routes.post('/users', UserController.store);
-routes.get('/users', UserController.index);
-routes.put('/users', Auth, UserController.update);
+routes.post('/deliveries', Auth, DeliveryController.store);
 
 /**
- * SESSION
+ * DELIVERY MANS
  */
-routes.post('/sessions', SesssionController.store);
+routes.post('/delivery-mans', Auth, DeliveryManController.store);
+routes.put('/delivery-mans/:id', Auth, DeliveryManController.update);
+routes.get('/delivery-mans', Auth, DeliveryManController.index);
+routes.delete('/delivery-mans/:id', Auth, DeliveryManController.delete);
+
+/**
+ * FILE
+ */
+routes.post('/files', Auth, upload.single('file'), AvatarFileContoller.store);
+// routes.post('/files', Auth, upload.any('file'), AssignatureFileContoller.store);
 
 /**
  * RECIPIENTS
@@ -34,15 +42,15 @@ routes.get('/recipients/:name', RecipientController.show);
 routes.put('/recipients', Auth, RecipientController.update);
 
 /**
- * DELIVERY MANS
+ * SESSION
  */
-routes.post('/delivery-mans', Auth, DeliveryManController.store);
-routes.put('/delivery-mans', Auth, DeliveryManController.update);
+routes.post('/sessions', SesssionController.store);
 
 /**
- * FILE
+ * USER
  */
-routes.post('/files', Auth, upload.any('file'), AvatarFileContoller.store);
-// routes.post('/files', Auth, upload.any('file'), AssignatureFileContoller.store);
+routes.post('/users', UserController.store);
+routes.get('/users', UserController.index);
+routes.put('/users', Auth, UserController.update);
 
 export default routes;
