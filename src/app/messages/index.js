@@ -3,7 +3,7 @@ export default {
     PASSWORD: { error: 'Password dosent match' },
     DUPLICITY: {
       USER: { error: 'User already exixts' },
-      RECIPIENT: { error: 'User already exists' },
+      RECIPIENT: { error: 'Recipient already exists' },
       DELIVERYMAN: { error: 'Deliveryman already exists' },
     },
     VALIDATION: { error: 'Validations fails!' },
@@ -14,5 +14,8 @@ export default {
   },
   SUCCES: {
     TEST: { message: 'End point ok' },
+  },
+  WARNING: {
+    LIST_EMPTY: { error: "You don't have any deliveries" },
   },
 };

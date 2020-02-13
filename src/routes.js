@@ -19,6 +19,7 @@ const upload = multer(multerConfig);
  * DELIVERY
  */
 routes.post('/deliveries', Auth, DeliveryController.store);
+routes.get('/deliveries/:id', Auth, DeliveryController.index);
 
 /**
  * DELIVERY MANS
