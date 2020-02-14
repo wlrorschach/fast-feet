@@ -5,6 +5,7 @@ import Recipient from '../models/Recipient';
 import Mail from '../../lib/Mail';
 import DeliveryMan from '../models/DeliveryMan';
 import DeliveyMail from '../jobs/DeliveyMail';
+import CancellationMail from '../jobs/CancellationMail';
 
 class DeliveryController {
   async store(req, res) {
@@ -71,14 +72,7 @@ class DeliveryController {
     });
 
     if (delivery.deliveryman_id !== deliveryMan) {
-      Mail.sendMail({
-        to: `${delivery.deliveryman.name} <${delivery.deliveryman.email}>`,
-        subject: 'Notificacao de cancelamento de entrega',
-        text: `Foi cancelada a entrega para o endereco abaixo:
-        Produto:  ${delivery.product_name}
-        Endereco de entrega: Rua: ${delivery.recipient.street}, numero: ${delivery.recipient.number}, cidade: ${delivery.recipient.city}, estado: ${delivery.recipient.state}
-        complemente: ${delivery.recipient.complement}`,
-      });
+      CancellationMail.handle(delivery);
       await delivery.update({ deliveryman_id: deliveryMan });
       DeliveyMail.handle(delivery);
     }
