@@ -19,10 +19,12 @@ const upload = multer(multerConfig);
  * DELIVERY
  */
 routes.post('/deliveries', Auth, DeliveryController.store);
-routes.get('/deliveries/:id', Auth, DeliveryController.index);
+routes.get('/deliveries/:deliverymanId', Auth, DeliveryController.index);
+routes.put('/deliveries/:id', Auth, DeliveryController.update);
+routes.delete('/deliveries/:id', Auth, DeliveryController.delete);
 
 /**
- * DELIVERY MANS
+ * DELIVERYMAN
  */
 routes.post('/delivery-mans', Auth, DeliveryManController.store);
 routes.put('/delivery-mans/:id', Auth, DeliveryManController.update);
