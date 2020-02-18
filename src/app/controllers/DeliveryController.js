@@ -2,9 +2,10 @@ import * as Yup from 'yup';
 import MESSAGE from '../messages';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
-import Mail from '../../lib/Mail';
 import DeliveryMan from '../models/DeliveryMan';
-import DeliveyMail from '../jobs/DeliveyMail';
+import Queue from '../../lib/Queue';
+
+import DeliveryMail from '../jobs/DeliveryMail';
 import CancellationMail from '../jobs/CancellationMail';
 
 class DeliveryController {
@@ -23,16 +24,15 @@ class DeliveryController {
 
     const { product_name, recipient_id, deliveryman_id } = req.body;
 
-    const recipient = await Recipient.findByPk(recipient_id);
-    const deliveryMan = await DeliveryMan.findByPk(deliveryman_id);
-
-    delivery.deliveryMan = deliveryMan;
-    delivery.recipient = recipient;
+    delivery.deliverymanRef = await DeliveryMan.findByPk(deliveryman_id);
+    delivery.recipientRef = await Recipient.findByPk(recipient_id);
     delivery.product_name = product_name;
 
-    DeliveyMail.handle(delivery);
+    // DeliveryMail.handle(delivery);
 
-    return res.json(delivery);
+    Queue.add(DeliveryMail.key, { delivery });
+
+    return res.json({ delivery });
   }
 
   async index(req, res) {
@@ -61,7 +61,7 @@ class DeliveryController {
         {
           model: DeliveryMan,
           as: 'deliveryman',
-          attributes: ['email', 'email'],
+          attributes: ['email', 'name'],
         },
         {
           model: Recipient,
@@ -72,9 +72,15 @@ class DeliveryController {
     });
 
     if (delivery.deliveryman_id !== deliveryMan) {
-      CancellationMail.handle(delivery);
+      Queue.add(CancellationMail.key, {
+        delivery,
+      });
+
       await delivery.update({ deliveryman_id: deliveryMan });
-      DeliveyMail.handle(delivery);
+
+      Queue.add(DeliveryMail.key, {
+        delivery,
+      });
     }
 
     return res.json(delivery);

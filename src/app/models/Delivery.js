@@ -8,6 +8,8 @@ class Delivery extends Model {
         canceale_at: Sequelize.DATE,
         start_at: Sequelize.DATE,
         end_at: Sequelize.DATE,
+        deliverymanRef: Sequelize.VIRTUAL,
+        recipientRef: Sequelize.VIRTUAL,
       },
       {
         sequelize,

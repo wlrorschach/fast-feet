@@ -5,7 +5,8 @@ class CalcellationMail {
     return 'CalcellationMail';
   }
 
-  async handle(delivery) {
+  async handle({ data }) {
+    const { delivery } = data;
     await Mail.sendMail({
       to: `${delivery.deliveryMan.name} <${delivery.deliveryMan.email}>`,
       subject: 'Notificacao de cancelamnto de entrega',
