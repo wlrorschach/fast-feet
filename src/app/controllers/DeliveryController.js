@@ -28,8 +28,6 @@ class DeliveryController {
     delivery.recipientRef = await Recipient.findByPk(recipient_id);
     delivery.product_name = product_name;
 
-    // DeliveryMail.handle(delivery);
-
     Queue.add(DeliveryMail.key, { delivery });
 
     return res.json({ delivery });
@@ -37,7 +35,7 @@ class DeliveryController {
 
   async index(req, res) {
     const deliveries = await Delivery.findAll({
-      where: { deliveryman_id: req.params.deliverymanId, canceale_at: null },
+      where: { cancealed_at: null },
     });
 
     if (!!deliveries.length === 0) {
@@ -89,7 +87,7 @@ class DeliveryController {
   async delete(req, res) {
     const delivery = await Delivery.findByPk(req.params.id);
 
-    delivery.update({ canceale_at: new Date() });
+    delivery.update({ cancealed_at: new Date() });
     return res.json();
   }
 }

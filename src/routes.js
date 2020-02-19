@@ -9,6 +9,7 @@ import SesssionController from './app/controllers/SesssionController';
 import DeliveryManController from './app/controllers/DeliveryManController';
 import AvatarFileContoller from './app/controllers/AvatarFileContoller';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliverymanDeliveries from './app/controllers/DeliverymanDeliveries';
 
 import multerConfig from './config/multer';
 
@@ -18,18 +19,24 @@ const upload = multer(multerConfig);
 /**
  * DELIVERY
  */
+routes.get('/deliveries', DeliveryController.index);
 routes.post('/deliveries', Auth, DeliveryController.store);
-routes.get('/deliveries/:deliverymanId', Auth, DeliveryController.index);
 routes.put('/deliveries/:id', Auth, DeliveryController.update);
 routes.delete('/deliveries/:id', Auth, DeliveryController.delete);
 
 /**
- * DELIVERYMAN
+ * DELIVERYMAN CRUD
  */
-routes.post('/delivery-mans', Auth, DeliveryManController.store);
-routes.put('/delivery-mans/:id', Auth, DeliveryManController.update);
-routes.get('/delivery-mans', Auth, DeliveryManController.index);
-routes.delete('/delivery-mans/:id', Auth, DeliveryManController.delete);
+routes.post('/deliverymans', Auth, DeliveryManController.store);
+routes.put('/deliverymans/:id', Auth, DeliveryManController.update);
+routes.get('/deliverymans', Auth, DeliveryManController.index);
+routes.delete('/deliverymans/:id', Auth, DeliveryManController.delete);
+
+/**
+ * DELIVERYMAN MANAGE DELIVERIES
+ */
+routes.get('/deliveryman/:id', DeliverymanDeliveries.index);
+routes.put('/deliveryman/:id', DeliverymanDeliveries.update);
 
 /**
  * FILE

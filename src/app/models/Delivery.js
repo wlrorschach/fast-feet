@@ -5,7 +5,7 @@ class Delivery extends Model {
     super.init(
       {
         product_name: Sequelize.STRING,
-        canceale_at: Sequelize.DATE,
+        cancealed_at: Sequelize.DATE,
         start_at: Sequelize.DATE,
         end_at: Sequelize.DATE,
         deliverymanRef: Sequelize.VIRTUAL,

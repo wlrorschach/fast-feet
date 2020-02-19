@@ -7,6 +7,8 @@ module.exports = {
   },
 
   down: queryInterface => {
-    return queryInterface.removeConstraint('delivery_mans', ['email']);
+    return queryInterface.removeConstraint('delivery_mans', [
+      'unique_email_constraint',
+    ]);
   },
 };

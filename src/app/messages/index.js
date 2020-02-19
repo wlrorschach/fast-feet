@@ -11,11 +11,15 @@ export default {
     NO_RESULT: { error: 'Recipient dosent exists' },
     UNAUTORIZED: { error: 'Unauthorized user' },
     INTERNAL_SERVER_ERROR: { error: 'Erro interno do servidor' },
+    INVALID_DATE: { error: 'Invalid date' },
   },
   SUCCES: {
     TEST: { message: 'End point ok' },
   },
   WARNING: {
-    LIST_EMPTY: { error: "You don't have any deliveries" },
+    LIST_EMPTY: { message: "You don't have any deliveries" },
+    MAX_DELIVERIES: {
+      message: 'You already have the maximum number of deliveries for today',
+    },
   },
 };
